@@ -57,10 +57,9 @@
                           Le but est de récupérer les types de pokemon en parcourant tous les enfants <type> de tous les pokemons,
                           mais sans avoir de doublons à la fin, vous ne pouvez pas mettre explicitement ici les types que vous trouver dans le fichier XML
                          Conseil : Cherchez une astuce sur internet ! -->
-                        <xsl:variable name="types" select="/pokemon/type[not(preceding::*=.)]"/>
+                        <xsl:variable name="types" select="//pokemon/type[not(preceding::*=.)]"/>
 
                         <xsl:for-each select="$types">
-
                             &#160;<button data-toggle="collapse" role="button" class="btn btn-outline-primary">
 
                             <xsl:attribute name="data-target">
@@ -85,7 +84,7 @@
 
                                 <!-- ##### A compléter 4 : Ici, vous devez faire appel au template lister_pokemon en lui passant le bon filtre en paramètre -->
                                 <xsl:call-template name="lister_pokemon">
-                                    <xsl:with-param name="filtre"><xsl:value-of select="$type"/></xsl:with-param>
+                                    <xsl:with-param name="filtre" select="$type"/>
                                 </xsl:call-template>
 
                             </div>
@@ -124,19 +123,19 @@
     <xsl:template name="lister_pokemon">
 
         <xsl:param name="filtre"/>  <!-- ##### A compléter 6 -->
-
         <div class="row">
 
-        <xsl:for-each select="$filtre">
 
-            <xsl:sort select="/pokedex/pokemon/id" /> <!-- ##### A compléter 7 : Vous devez trier les pokemons par la valeur numérique de leur ID -->
+        <xsl:for-each select="/pokedex/pokemon[type = $filtre]">
+
+            <xsl:sort order="ascending" select="/pokedex/pokemon/id" /> <!-- ##### A compléter 7 : Vous devez trier les pokemons par la valeur numérique de leur ID -->
             <xsl:apply-templates select="."/>
 
         </xsl:for-each>
 
     </div>
 
-</xsl:template>
+    </xsl:template>
 
 <xsl:template match="pokemon">
 
@@ -153,7 +152,7 @@
         <!-- generation = "5" si l'id du pokemon est plus petit ou égal à 649 et plus grand que 493 -->
         <!-- generation = "6" si l'id du pokemon est plus petit ou égal à 721 et plus grand que 649.-->
         <!-- generation = "7" si l'id du pokemon est plus petit ou égal à 809 et plus grand que 721-->
-        <!-- <xsl:choose>
+        <xsl:choose>
             <xsl:when test="151 >= id">1</xsl:when>
             <xsl:when test="251 >= id">2</xsl:when>
             <xsl:when test="386 >= id">3</xsl:when>
@@ -161,9 +160,7 @@
             <xsl:when test="649 >= id">5</xsl:when>
             <xsl:when test="721 >= id">6</xsl:when>
             <xsl:when test="809 >= id">7</xsl:when>
-        </xsl:choose> -->
-
-        <xsl:value-of select="1"/>
+        </xsl:choose>
 
         <!-- Fin A compléter 10 -->
     </xsl:attribute>
